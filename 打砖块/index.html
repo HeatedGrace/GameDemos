@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>打砖块</title>
+	<style type="text/css">
+		#id-canvas {
+			border: 1px solid #000;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="id-canvas" width="400" height="300"></canvas>
+	<script>
+		var log = console.log.bind(console);
+
+	    function imageFromPath(path){
+	    	var img = new Image();
+	    	img.src = path;
+	    	return img;
+	    }
+
+
+	    var Paddle = function(canvas){
+	    	var image = imageFromPath('pan.jpg');
+	    	var o = {
+	    		image: image,
+	    		x: 200,
+	    		y: 250,
+	    		speed: 5
+	    	}
+	    	o.moveLeft = function(){
+	    		this.x -= this.speed;
+	    		if( this.x < 0 ){
+	    			this.x = 0;
+	    		}
+	    	}
+	    	o.moveRight = function(){
+	    		this.x += this.speed;
+	    		if( this.x > canvas.width - this.image.width ){
+	    			this.x = canvas.width  - this.image.width;
+	    		}
+	    	}
+	    	return o;
+	    }
+
+	    var Draw = function(){
+
+	    }
+
+	    var __main = function(){
+
+	    	var draw = Draw();
+
+			var paddle = Paddle(canvas);
+	    	
+
+	    	var canvas = document.getElementById("id-canvas");
+			var context = canvas.getContext('2d');
+
+
+		    var leftDown = false,
+		    rightDown = false;
+
+		    window.addEventListener('keydown',function(event){
+		    	var k = event.keyCode;
+		    	if( k == 65) {	//按键'a'
+		    		leftDown = true;
+		    	}else if( k == 68){	//按键'd'
+		    		rightDown = true;
+		    	}
+		    })
+
+		     window.addEventListener('keyup',function(event){
+		    	var k = event.keyCode;
+		    	if( k == 65) {	//按键'a'
+		    		leftDown = false;
+		    	}else if( k == 68){	//按键'd'
+		    		rightDown = false;
+		    	}
+		    })
+
+		    setInterval(function(){
+		    	if( leftDown ){
+		    		paddle.moveLeft();
+		    	}else if( rightDown ){
+		    		paddle.moveRight();
+		    	}
+		    	context.clearRect(0, 0, canvas.width, canvas.height);
+		   		context.drawImage(paddle.image, paddle.x, paddle.y);
+		    },1000/50)
+	    }
+	    __main();
+	</script>
+</body>
+</html>
